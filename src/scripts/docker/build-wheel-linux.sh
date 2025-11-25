@@ -2,7 +2,7 @@
 
 # This file is meant to be used inside the docker image build by the
 # `build-docker-image.sh` script. This file build triton-library for Python
-# 3.8, 3.9, 3.10, 3.11, 3.12, and 3.13. It is used by the Build Python
+# 3.8, 3.9, 3.10, 3.11, 3.12, 3.13, and 3.14. It is used by the Build Python
 # Package Github workflow but can also be used locally by running:
 #
 # $ docker pull quay.io/pypa/manylinux_2_34_x86_64
@@ -92,6 +92,15 @@ cd $SOURCE_DIR
 rm -rf $SOURCE_DIR/build
 rm -rf $SOURCE_DIR/triton_library.egg-info
 export PYTHON_BINARY=$(ls -d /opt/_internal/cpython-3.13.*/bin/python | sort | head -n1)
+export PYTHON_INCLUDE_DIRS=$($PYTHON_BINARY -c "from sysconfig import get_paths; print(get_paths()['include'])")
+export PYTHON_LIBRARY=$($PYTHON_BINARY -c "from sysconfig import get_paths; print(get_paths()['include'])")
+
+# Build Triton Python wheel package for Python 3.14.
+echo "[+] Build Triton wheel package for Python 3.14"
+cd $SOURCE_DIR
+rm -rf $SOURCE_DIR/build
+rm -rf $SOURCE_DIR/triton_library.egg-info
+export PYTHON_BINARY=$(ls -d /opt/_internal/cpython-3.14.*/bin/python | sort | head -n1)
 export PYTHON_INCLUDE_DIRS=$($PYTHON_BINARY -c "from sysconfig import get_paths; print(get_paths()['include'])")
 export PYTHON_LIBRARY=$($PYTHON_BINARY -c "from sysconfig import get_paths; print(get_paths()['include'])")
 
